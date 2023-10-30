@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Filmiki.online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Filmiki.online</h1>
+    <div th:if="${powiadomienie}" class="alert alert-success" role="alert" th:text="${powiadomienie}"></div>
+    <div>
+        <form method="post" enctype="multipart/form-data" action="/wideo">
+            <div class="form-group">
+                <label for="file">Wybierz Plik:</label>
+                <input type="file" class="form-control-file" id="plik" name="plik" required>
+            </div>
+            <div class="form-group">
+                <label for="title">Wpisz Tytuł:</label>
+                <input type="text" class="form-control" id="tytul" name="tytul" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Wpisz Opis:</label>
+                <textarea class="form-control" id="opis" name="opis" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="duration">Czas trwania:</label>
+                <input type="text" class="form-control" id="trwanie" name="trwanie" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Dodaj Wideo</button>
+        </form>
+    </div>
+    <div>
+        <h2>Lista wideo</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">tytul</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Czas trwania</th>
+                <th scope="col">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="wideo : ${wideo}">
+                <th scope="row" th:text="${wideo.id}"></th>
+                <td th:text="${wideo.tytul}"></td>
+                <td th:text="${wideo.opis}"></td>
+                <td th:text="${wideo.trwanie}"></td>
+                <td>
+                    <a th:href="@{'/wideo/' + ${wideo.id}}" class="btn btn-info">Pokaz</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#usunModal" th:data-wideo-id="${wideo.id}">
+                        Usun
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="usunModal" tabindex="-1" role="dialog" aria-labelledby="usunModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="usunModalLabel">Potwierdź</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Czy na pewno chcesz usunąć wideo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                <form method="post" action="" id="usunForm">
+                    <button type="submit" class="btn btn-danger">Usuń</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $('#usunModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var videoId = button.data('wideo-id');
+        var action = '/wideo/' + videoId + '/usun';
+        var form = $('#usunForm');
+        form.attr('action', action);
+    });
+</script>
+</body>
+</html>
