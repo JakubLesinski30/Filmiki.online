@@ -27,13 +27,13 @@ import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/wideo")
-public class VideoController {
+public class WideoController {
 
     
     private final SerwisWideo wideoSerwis;
 
     @Autowired
-    public VideoController(SerwisWideo wideoSerwis) {
+    public WideoController(SerwisWideo wideoSerwis) {
         this.wideoSerwis = wideoSerwis;
     }
 
@@ -65,6 +65,12 @@ public class VideoController {
                            @RequestParam("opis") String opis,
                            @RequestParam("trwanie") String trwanie,
                            RedirectAttributes redirectAttributes) {
+
+                            String contentType = plik.getContentType();
+    if (!"video/mp4".equals(contentType) && !"video/x-msvideo".equals(contentType)) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Nieprawidłowy format pliku. Dozwolone są tylko pliki .mp4 i .avi.");
+        return "redirect:/wideo";
+    }
 
                             String orignalnaNazwa = plik.getOriginalFilename();
 

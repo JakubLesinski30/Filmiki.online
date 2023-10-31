@@ -14,11 +14,12 @@
 <div class="container">
     <h1>Filmiki.online</h1>
     <div th:if="${powiadomienie}" class="alert alert-success" role="alert" th:text="${powiadomienie}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
     <div>
         <form method="post" enctype="multipart/form-data" action="/wideo">
             <div class="form-group">
                 <label for="file">Wybierz Plik:</label>
-                <input type="file" class="form-control-file" id="plik" name="plik" required>
+                <input type="file" class="form-control-file" id="plik" name="plik" required accept=".mp4,.avi">
             </div>
             <div class="form-group">
                 <label for="title">Wpisz Tytuł:</label>
